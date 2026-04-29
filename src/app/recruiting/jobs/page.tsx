@@ -1,10 +1,14 @@
 import Link from "next/link";
 import { Plus } from "lucide-react";
+import { getSupabaseConfigFallback } from "@/components/recruiting/SupabaseConfigFallback";
 import { ButtonLink, Card, CardHeader, Badge, EmptyState } from "@/components/recruiting/ui";
 import { requireCurrentProfile } from "@/lib/recruiting/auth";
 import { listJobs } from "@/lib/recruiting/db";
 
 export default async function JobsPage() {
+  const configFallback = getSupabaseConfigFallback();
+  if (configFallback) return configFallback;
+
   const profile = await requireCurrentProfile();
   const jobs = await listJobs(profile);
 

@@ -1,4 +1,5 @@
 import { requestInterviewAction } from "@/app/recruiting/actions";
+import { getSupabaseConfigFallback } from "@/components/recruiting/SupabaseConfigFallback";
 import { Badge, Card, CardHeader, Field, SubmitButton, inputClass, textareaClass } from "@/components/recruiting/ui";
 import { requireCurrentProfile } from "@/lib/recruiting/auth";
 import { auditLog } from "@/lib/recruiting/audit";
@@ -6,6 +7,9 @@ import { createSignedUrl } from "@/lib/recruiting/storage";
 import { getCandidate, listProfiles } from "@/lib/recruiting/db";
 
 export default async function CandidatePage({ params }: { params: Promise<{ candidateId: string }> }) {
+  const configFallback = getSupabaseConfigFallback();
+  if (configFallback) return configFallback;
+
   const { candidateId } = await params;
   const profile = await requireCurrentProfile();
   const candidate = await getCandidate(candidateId, profile);

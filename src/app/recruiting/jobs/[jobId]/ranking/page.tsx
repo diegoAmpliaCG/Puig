@@ -1,9 +1,13 @@
 import Link from "next/link";
+import { getSupabaseConfigFallback } from "@/components/recruiting/SupabaseConfigFallback";
 import { Badge, Card, CardHeader, EmptyState, Metric } from "@/components/recruiting/ui";
 import { requireCurrentProfile } from "@/lib/recruiting/auth";
 import { getCandidatesForJob, getJob, evaluationFor } from "@/lib/recruiting/db";
 
 export default async function RankingPage({ params, searchParams }: { params: Promise<{ jobId: string }>; searchParams: Promise<Record<string, string | undefined>> }) {
+  const configFallback = getSupabaseConfigFallback();
+  if (configFallback) return configFallback;
+
   const { jobId } = await params;
   const filters = await searchParams;
   const profile = await requireCurrentProfile();

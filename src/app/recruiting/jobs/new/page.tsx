@@ -1,7 +1,11 @@
 import { createJobAction } from "@/app/recruiting/actions";
+import { getSupabaseConfigFallback } from "@/components/recruiting/SupabaseConfigFallback";
 import { Card, CardHeader, Field, SubmitButton, inputClass, textareaClass } from "@/components/recruiting/ui";
 
 export default function NewJobPage() {
+  const configFallback = getSupabaseConfigFallback();
+  if (configFallback) return configFallback;
+
   return (
     <div className="mx-auto max-w-3xl">
       <Card>
