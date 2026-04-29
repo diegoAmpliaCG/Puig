@@ -1,11 +1,22 @@
 import { CheckCircle2 } from "lucide-react";
 import { confirmBookingAction } from "@/app/recruiting/actions";
+import { ConfigPending } from "@/components/recruiting/ConfigPending";
 import { Card, CardHeader, SubmitButton } from "@/components/recruiting/ui";
+import { getMissingSupabaseEnv } from "@/lib/env";
 import { getBookingData } from "@/lib/recruiting/booking";
 
 export default async function BookingPage({ params, searchParams }: { params: Promise<{ token: string }>; searchParams: Promise<Record<string, string | undefined>> }) {
   const { token } = await params;
   const query = await searchParams;
+  const missing = getMissingSupabaseEnv();
+
+  if (missing.length) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-[#f6f7f9] p-5">
+        <ConfigPending missing={missing} />
+      </main>
+    );
+  }
 
   if (query.scheduled) {
     return (

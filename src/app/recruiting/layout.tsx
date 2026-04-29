@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { BriefcaseBusiness, CalendarDays, FileSearch, Settings, UsersRound } from "lucide-react";
 import { switchUserAction } from "@/app/recruiting/actions";
+import { ConfigPending } from "@/components/recruiting/ConfigPending";
+import { getMissingSupabaseEnv } from "@/lib/env";
 import { getCurrentProfile } from "@/lib/recruiting/auth";
 import { listProfiles } from "@/lib/recruiting/db";
 
@@ -13,6 +15,7 @@ const nav = [
 ];
 
 export default async function RecruitingLayout({ children }: { children: React.ReactNode }) {
+  const missing = getMissingSupabaseEnv();
   const profile = await getCurrentProfile().catch(() => null);
   const profiles = profile ? await listProfiles(profile.company_id) : [];
 
@@ -55,7 +58,9 @@ export default async function RecruitingLayout({ children }: { children: React.R
             </form>
           ) : null}
         </header>
-        <div className="mx-auto w-full max-w-7xl px-5 py-6">{children}</div>
+        <div className="mx-auto w-full max-w-7xl px-5 py-6">
+          {missing.length ? <ConfigPending missing={missing} /> : children}
+        </div>
       </main>
     </div>
   );
