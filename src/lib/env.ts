@@ -16,3 +16,15 @@ export function getAppUrl() {
 export function getOpenAIModel() {
   return getEnv("OPENAI_MODEL", "gpt-5.4-mini");
 }
+
+export function getMissingEnv(names: string[]) {
+  return names.filter((name) => !getEnv(name));
+}
+
+export function getMissingSupabaseEnv() {
+  return getMissingEnv([
+    "NEXT_PUBLIC_SUPABASE_URL",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+    "SUPABASE_SERVICE_ROLE_KEY",
+  ]);
+}
