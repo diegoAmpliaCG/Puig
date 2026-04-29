@@ -1,9 +1,13 @@
 import Link from "next/link";
+import { getSupabaseConfigFallback } from "@/components/recruiting/SupabaseConfigFallback";
 import { Badge, Card, CardHeader, EmptyState } from "@/components/recruiting/ui";
 import { requireCurrentProfile } from "@/lib/recruiting/auth";
 import { listJobs } from "@/lib/recruiting/db";
 
 export default async function TeamJobsPage() {
+  const configFallback = getSupabaseConfigFallback();
+  if (configFallback) return configFallback;
+
   const profile = await requireCurrentProfile();
   const jobs = await listJobs(profile);
 

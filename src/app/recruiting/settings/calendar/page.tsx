@@ -1,10 +1,14 @@
 import { saveCalendarSettingsAction } from "@/app/recruiting/actions";
+import { getSupabaseConfigFallback } from "@/components/recruiting/SupabaseConfigFallback";
 import { Card, CardHeader, Field, SubmitButton, inputClass } from "@/components/recruiting/ui";
 import { requireCurrentProfile } from "@/lib/recruiting/auth";
 import { getCalendarConnection } from "@/lib/recruiting/db";
 import { normalizeRules } from "@/lib/google/calendar";
 
 export default async function CalendarSettingsPage() {
+  const configFallback = getSupabaseConfigFallback();
+  if (configFallback) return configFallback;
+
   const profile = await requireCurrentProfile();
   const connection = await getCalendarConnection(profile.id, profile.company_id);
   const rules = normalizeRules(connection?.availability_rules_json);

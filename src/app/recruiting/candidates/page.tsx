@@ -1,9 +1,13 @@
 import Link from "next/link";
+import { getSupabaseConfigFallback } from "@/components/recruiting/SupabaseConfigFallback";
 import { Badge, Card, CardHeader } from "@/components/recruiting/ui";
 import { requireCurrentProfile } from "@/lib/recruiting/auth";
 import { listJobs, getCandidatesForJob, evaluationFor } from "@/lib/recruiting/db";
 
 export default async function CandidatesPage() {
+  const configFallback = getSupabaseConfigFallback();
+  if (configFallback) return configFallback;
+
   const profile = await requireCurrentProfile();
   const jobs = await listJobs(profile);
   const nested = await Promise.all(jobs.map((job) => getCandidatesForJob(job.id, profile.company_id)));

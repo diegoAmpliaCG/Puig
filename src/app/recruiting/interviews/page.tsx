@@ -1,8 +1,12 @@
+import { getSupabaseConfigFallback } from "@/components/recruiting/SupabaseConfigFallback";
 import { Badge, Card, CardHeader, EmptyState } from "@/components/recruiting/ui";
 import { requireCurrentProfile } from "@/lib/recruiting/auth";
 import { listInterviewRequests } from "@/lib/recruiting/db";
 
 export default async function InterviewsPage() {
+  const configFallback = getSupabaseConfigFallback();
+  if (configFallback) return configFallback;
+
   const profile = await requireCurrentProfile();
   const requests = await listInterviewRequests(profile.company_id);
 

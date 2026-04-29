@@ -1,11 +1,15 @@
 import Link from "next/link";
 import { DriveImportPanel } from "@/components/recruiting/DriveImportPanel";
+import { getSupabaseConfigFallback } from "@/components/recruiting/SupabaseConfigFallback";
 import { Badge, ButtonLink, Card, CardHeader, EmptyState, Field, Metric, SubmitButton, inputClass, textareaClass } from "@/components/recruiting/ui";
 import { processJobAction, publishJobAction, uploadCandidateFilesAction, uploadJobDescriptionAction } from "@/app/recruiting/actions";
 import { requireCurrentProfile } from "@/lib/recruiting/auth";
 import { getCandidatesForJob, getJobFiles, getManagedJob, listTeams } from "@/lib/recruiting/db";
 
 export default async function JobDetailPage({ params }: { params: Promise<{ jobId: string }> }) {
+  const configFallback = getSupabaseConfigFallback();
+  if (configFallback) return configFallback;
+
   const { jobId } = await params;
   const profile = await requireCurrentProfile();
   const job = await getManagedJob(jobId, profile);
